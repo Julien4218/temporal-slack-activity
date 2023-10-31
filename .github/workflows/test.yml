@@ -61,8 +61,8 @@ jobs:
       - name: Unit Tests
         run: make test-unit coverage-report-unit
 
-      - name: Report unit test coverage via Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          files: ./coverage/unit.out
-          flags: unit
+      # - name: Report unit test coverage via Codecov
+      #   uses: codecov/codecov-action@v3
+      #   with:
+      #     files: ./coverage/unit.out
+      #     flags: unit
