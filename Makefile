@@ -36,7 +36,6 @@ clean: cover-clean compile-clean release-clean
 # Import fragments
 include build/compile.mk
 include build/deps.mk
-include build/docker.mk
 include build/document.mk
 include build/generate.mk
 include build/lint.mk
