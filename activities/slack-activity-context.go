@@ -6,10 +6,6 @@ import (
 	"github.com/slack-go/slack"
 )
 
-type SlackClient interface {
-	PostMessage(channelID string, options ...slack.MsgOption) (string, string, error)
-}
-
 type SlackActivityContext struct {
 	client SlackClient
 }
