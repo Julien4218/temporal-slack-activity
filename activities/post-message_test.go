@@ -8,7 +8,10 @@ import (
 )
 
 func TestPostMessageShouldSucceed(t *testing.T) {
-	result, err := PostMessageActivity(context.Background(), "input")
+	client := NewMockSlackClient()
+	ctx := NewSlackActivityContextWith(client)
+	result, err := ctx.postMessageActivityImpl(context.Background(), "a name", "a channel")
 	require.NoError(t, err)
-	require.Equal(t, *result, "pass")
+	require.Equal(t, result, "")
+	require.Equal(t, client.PostMessageCount, 1)
 }
