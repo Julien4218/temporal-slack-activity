@@ -2,8 +2,9 @@ package activities
 
 import (
 	"context"
-	"github.com/Julien4218/temporal-slack-activity/models"
 	"testing"
+
+	"github.com/Julien4218/temporal-slack-activity/models"
 
 	"github.com/stretchr/testify/require"
 )

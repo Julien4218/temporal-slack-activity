@@ -3,9 +3,11 @@ package activities
 import (
 	"context"
 	"fmt"
+
+	"github.com/slack-go/slack"
+
 	"github.com/Julien4218/temporal-slack-activity/instrumentation"
 	"github.com/Julien4218/temporal-slack-activity/models"
-	"github.com/slack-go/slack"
 )
 
 func PostMessageActivity(ctx context.Context, firstResponseWarning string, channel string, attachment models.MessageAttachment) (string, error) {
