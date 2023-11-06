@@ -12,11 +12,15 @@ import (
 func TestPostMessageShouldSucceed(t *testing.T) {
 	client := NewMockSlackClient()
 	ctx := NewSlackActivityContextWith(client)
-	attachment := models.MessageAttachment{
-		Pretext: "foo",
-		Text:    "bar",
+	slackActivityData := models.SlackActivityData{
+		ChannelId:            "foo",
+		FirstResponseWarning: "bar",
+		Attachment: models.MessageAttachment{
+			Pretext: "foo",
+			Text:    "bar",
+		},
 	}
-	result, err := ctx.postMessageActivityImpl(context.Background(), "a name", "a channel", attachment)
+	result, err := ctx.postMessageActivityImpl(context.Background(), slackActivityData)
 	require.NoError(t, err)
 	require.Equal(t, result, "")
 	require.Equal(t, client.PostMessageCount, 1)
