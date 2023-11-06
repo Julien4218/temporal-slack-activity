@@ -3,25 +3,23 @@ package activities
 import (
 	"context"
 	"fmt"
-
-	"github.com/slack-go/slack"
-
 	"github.com/Julien4218/temporal-slack-activity/instrumentation"
+	"github.com/Julien4218/temporal-slack-activity/models"
+	"github.com/slack-go/slack"
 )
 
-func PostMessageActivity(ctx context.Context, name string, channel string) (string, error) {
-	return NewSlackActivityContext().postMessageActivityImpl(ctx, name, channel)
+func PostMessageActivity(ctx context.Context, firstResponseWarning string, channel string, attachment models.MessageAttachment) (string, error) {
+	return NewSlackActivityContext().postMessageActivityImpl(ctx, firstResponseWarning, channel, attachment)
 }
 
-func (c *SlackActivityContext) postMessageActivityImpl(ctx context.Context, name string, channel string) (string, error) {
-	instrumentation.Log(fmt.Sprintf("SlackMessageActivity name:%s", name))
+func (c *SlackActivityContext) postMessageActivityImpl(ctx context.Context, firstResponseWarning string, channel string, attachment models.MessageAttachment) (string, error) {
 
-	stackTrace := "Traceback (most recent call last):\n  File \"tb.py\", line 15, in <module>\n    a()\n  File \"tb.py\", line 3, in a\n    j = b(i)\n  File \"tb.py\", line 9, in b\n    c()\n  File \"tb.py\", line 13, in c\n    error()\nNameError: name 'error' is not defined\n"
-	attachment := slack.Attachment{
-		Pretext: "Does this look like an error?",
-		Text:    stackTrace,
+	slackAttachment := slack.Attachment{
+		Pretext: attachment.Pretext,
+		Text:    attachment.Text,
 	}
-	channelID, timestamp, err := c.client.PostMessage(channel, slack.MsgOptionText(name, false), slack.MsgOptionAttachments(attachment))
+	instrumentation.Log(fmt.Sprintf("SlackMessageActivity firstResponseWarning:%s", firstResponseWarning))
+	channelID, timestamp, err := c.client.PostMessage(channel, slack.MsgOptionText(firstResponseWarning, false), slack.MsgOptionAttachments(slackAttachment))
 	if err != nil {
 		instrumentation.Log(fmt.Sprintf("Error:%s", err.Error()))
 		return "", err
