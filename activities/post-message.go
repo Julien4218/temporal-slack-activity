@@ -10,18 +10,14 @@ import (
 	"github.com/Julien4218/temporal-slack-activity/models"
 )
 
-func PostMessageActivity(ctx context.Context, firstResponseWarning string, channel string, attachment models.MessageAttachment) (string, error) {
-	return NewSlackActivityContext().postMessageActivityImpl(ctx, firstResponseWarning, channel, attachment)
+func PostMessageActivity(ctx context.Context, slackActivityData models.SlackActivityData) (string, error) {
+	return NewSlackActivityContext().postMessageActivityImpl(ctx, slackActivityData)
 }
 
-func (c *SlackActivityContext) postMessageActivityImpl(ctx context.Context, firstResponseWarning string, channel string, attachment models.MessageAttachment) (string, error) {
+func (c *SlackActivityContext) postMessageActivityImpl(ctx context.Context, slackActivityData models.SlackActivityData) (string, error) {
 
-	slackAttachment := slack.Attachment{
-		Pretext: attachment.Pretext,
-		Text:    attachment.Text,
-	}
-	instrumentation.Log(fmt.Sprintf("SlackMessageActivity firstResponseWarning:%s", firstResponseWarning))
-	channelID, timestamp, err := c.client.PostMessage(channel, slack.MsgOptionText(firstResponseWarning, false), slack.MsgOptionAttachments(slackAttachment))
+	slackAttachment := translateToSlackAttachment(slackActivityData)
+	channelID, timestamp, err := c.client.PostMessage(slackActivityData.ChannelId, slack.MsgOptionText(slackActivityData.FirstResponseWarning, false), slack.MsgOptionAttachments(slackAttachment))
 	if err != nil {
 		instrumentation.Log(fmt.Sprintf("Error:%s", err.Error()))
 		return "", err
@@ -29,4 +25,11 @@ func (c *SlackActivityContext) postMessageActivityImpl(ctx context.Context, firs
 
 	instrumentation.Log(fmt.Sprintf("Message successfully sent to channel %s at %s", channelID, timestamp))
 	return "", nil
+}
+
+func translateToSlackAttachment(slackActivityData models.SlackActivityData) slack.Attachment {
+	return slack.Attachment{
+		Pretext: slackActivityData.Attachment.Pretext,
+		Text:    slackActivityData.Attachment.Text,
+	}
 }
