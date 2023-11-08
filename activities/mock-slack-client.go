@@ -8,6 +8,11 @@ type MockSlackClient struct {
 	PostMessageCount int
 }
 
+func (c *MockSlackClient) AddReaction(name string, item slack.ItemRef) error {
+	//TODO implement me
+	panic("implement me")
+}
+
 func (c *MockSlackClient) GetReactions(item slack.ItemRef, params slack.GetReactionsParameters) ([]slack.ItemReaction, error) {
 	//TODO implement me
 	panic("implement me")
