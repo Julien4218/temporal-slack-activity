@@ -17,7 +17,11 @@ func PostMessageActivity(ctx context.Context, slackActivityData models.SlackActi
 func (c *SlackActivityContext) postMessageActivityImpl(ctx context.Context, slackActivityData models.SlackActivityData) (models.MessageDetails, error) {
 
 	slackAttachment := translateToSlackAttachment(slackActivityData)
-	responseChannelID, responseTimestamp, err := c.client.PostMessage(slackActivityData.ChannelId, slack.MsgOptionText(slackActivityData.FirstResponseWarning, false), slack.MsgOptionAttachments(slackAttachment))
+	responseChannelID, responseTimestamp, err := c.client.PostMessage(slackActivityData.ChannelId,
+		slack.MsgOptionText(slackActivityData.FirstResponseWarning, false),
+		slack.MsgOptionAttachments(slackAttachment),
+		slack.MsgOptionIconURL("https://lh4.googleusercontent.com/qyrA5kR-lTStynpecJwuLKGjrGGV1_6HJ4By4hOYLuVSq4jsm5Q3jgXr-WQHExldtD9WYO4PoEz23IqAeFaExH2UnCDphnutaI7mv3va5VPaRUyS9V-S0NaKNocj6JsIsO6km9E"),
+	)
 
 	instrumentation.Log(fmt.Sprintf("Message successfully sent to channel %s at %s", responseChannelID, responseTimestamp))
 	return models.MessageDetails{
