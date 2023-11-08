@@ -20,8 +20,9 @@ func TestPostMessageShouldSucceed(t *testing.T) {
 			Text:    "bar",
 		},
 	}
-	result, err := ctx.postMessageActivityImpl(context.Background(), slackActivityData)
+	messageDetails, err := ctx.postMessageActivityImpl(context.Background(), slackActivityData)
 	require.NoError(t, err)
-	require.Equal(t, result, "")
+	require.Equal(t, messageDetails.ChannelID, "")
+	require.Equal(t, messageDetails.Timestamp, "")
 	require.Equal(t, client.PostMessageCount, 1)
 }

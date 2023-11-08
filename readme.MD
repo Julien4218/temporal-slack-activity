@@ -21,3 +21,11 @@ $ make
 $ make build
 
 ```
+
+### Testing
+
+You can run the unit tests with the supplied `All Tests` run config if you're using a Jetbrains IDE, or you can run them via `make` with 
+the following command
+```bash
+$ make test
+```
