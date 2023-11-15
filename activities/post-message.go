@@ -22,6 +22,11 @@ func (c *SlackActivityContext) postMessageActivityImpl(ctx context.Context, slac
 		slack.MsgOptionAttachments(slackAttachment),
 		slack.MsgOptionIconURL("https://lh4.googleusercontent.com/qyrA5kR-lTStynpecJwuLKGjrGGV1_6HJ4By4hOYLuVSq4jsm5Q3jgXr-WQHExldtD9WYO4PoEz23IqAeFaExH2UnCDphnutaI7mv3va5VPaRUyS9V-S0NaKNocj6JsIsO6km9E"),
 	)
+	if err != nil {
+		message := fmt.Sprintf("error while posting message, detail:%s", err.Error())
+		instrumentation.Log(message)
+		return models.MessageDetails{}, err
+	}
 
 	instrumentation.Log(fmt.Sprintf("Message successfully sent to channel %s at %s", responseChannelID, responseTimestamp))
 	return models.MessageDetails{

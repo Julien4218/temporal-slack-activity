@@ -2,6 +2,7 @@ package activities
 
 import (
 	"context"
+
 	"github.com/slack-go/slack"
 )
 
